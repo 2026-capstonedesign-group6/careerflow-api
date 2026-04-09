@@ -1,3 +1,20 @@
 spring:
   application:
-    name: careerflow-api
+    name: carrerflow-api
+  profiles:
+    active: local
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: false
+
+logging:
+  level:
+    root: INFO
+    dev.wonyoung: DEBUG
