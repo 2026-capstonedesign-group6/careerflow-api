@@ -62,6 +62,17 @@ import java.lang.annotation.Target;
                                             "timestamp": "2026-01-17 12:00:00"
                                         }
                                         """
+                        ),
+                        @ExampleObject(
+                                name = "인증 메일 재발송 횟수 초과",
+                                value = """
+                                        {
+                                            "result": "FAIL",
+                                            "code": "A009",
+                                            "message": "요청 횟수가 너무 많습니다. 잠시 후 다시 시도해주세요.",
+                                            "timestamp": "2026-01-17 12:00:00"
+                                        }
+                                        """
                         )
                 }
         )

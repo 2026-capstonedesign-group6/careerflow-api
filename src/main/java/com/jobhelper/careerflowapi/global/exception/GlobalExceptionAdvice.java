@@ -36,6 +36,14 @@ public class GlobalExceptionAdvice {
                 .body(body);
     }
 
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<CommonResponse<Void>> handleAuthorizationException(AuthorizationException ex, HttpServletRequest request) {
+        log.warn("[AUTH] {} {} | {}: {}", request.getMethod(), request.getRequestURI(), ex.getErrorCode().getCode(), ex.getMessage());
+        return ResponseEntity
+                .status(ex.getErrorCode().getStatus())
+                .body(CommonResponse.onFailure(ex.getErrorCode()));
+    }
+
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<CommonResponse<List<CommonResponse.ValidationErrorDetail>>> handleValidationException(BindException ex, HttpServletRequest request) {
         String errorMessage = ex.getBindingResult().getFieldError() != null

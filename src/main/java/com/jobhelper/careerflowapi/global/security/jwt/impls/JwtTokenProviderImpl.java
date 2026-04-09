@@ -36,8 +36,6 @@ public class JwtTokenProviderImpl implements JwtTokenProvider {
 
     @Override
     public String createAccessToken(Long userId, String email, Collection<? extends GrantedAuthority> authorities) {
-        log.info("Access Token 생성 요청 - userId={}, email={}, authorities={}", userId, email, authorities);
-
         Instant now = Instant.now();
         Instant accessTokenExpiresIn = now.plus(jwtProperties.accessTokenValidityInSeconds(), ChronoUnit.SECONDS);
 
@@ -46,9 +44,7 @@ public class JwtTokenProviderImpl implements JwtTokenProvider {
                 .toList()
         );
 
-        log.info("Access Token 생성 완료 - userId={}, email={}, authorities={}, expiresIn={}",
-                userId, email, authoritiesString, accessTokenExpiresIn
-        );
+        log.debug("Access Token 생성 - userId={}, authorities={}, expiresIn={}", userId, authoritiesString, accessTokenExpiresIn);
 
         return Jwts.builder()
                 .subject(email)
@@ -62,12 +58,10 @@ public class JwtTokenProviderImpl implements JwtTokenProvider {
 
     @Override
     public String createRefreshToken(String email) {
-        log.info("Refresh Token 생성 요청 - email={}", email);
-
         Instant now = Instant.now();
         Instant refreshTokenExpiresIn = now.plus(jwtProperties.refreshTokenValidityInSeconds(), ChronoUnit.SECONDS);
 
-        log.info("Refresh Token 생성 완료 - email={}, expiresIn={}", email, refreshTokenExpiresIn);
+        log.debug("Refresh Token 생성 - expiresIn={}", refreshTokenExpiresIn);
 
         return Jwts.builder()
                 .subject(email)

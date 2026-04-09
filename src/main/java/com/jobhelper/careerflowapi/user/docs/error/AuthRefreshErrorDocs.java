@@ -58,6 +58,39 @@ import java.lang.annotation.Target;
                                             "timestamp": "2026-01-17 12:00:00"
                                         }
                                         """
+                        ),
+                        @ExampleObject(
+                                name = "리프레시 토큰 변조",
+                                value = """
+                                        {
+                                            "result": "FAIL",
+                                            "code": "A003",
+                                            "message": "잘못된 JWT 토큰입니다.",
+                                            "timestamp": "2026-01-17 12:00:00"
+                                        }
+                                        """
+                        ),
+                        @ExampleObject(
+                                name = "리프레시 토큰 만료",
+                                value = """
+                                        {
+                                            "result": "FAIL",
+                                            "code": "A004",
+                                            "message": "만료된 JWT 토큰입니다.",
+                                            "timestamp": "2026-01-17 12:00:00"
+                                        }
+                                        """
+                        ),
+                        @ExampleObject(
+                                name = "리프레시 토큰 형식 오류",
+                                value = """
+                                        {
+                                            "result": "FAIL",
+                                            "code": "A005",
+                                            "message": "유효하지 않은 JWT 토큰입니다.",
+                                            "timestamp": "2026-01-17 12:00:00"
+                                        }
+                                        """
                         )
                 }
         )

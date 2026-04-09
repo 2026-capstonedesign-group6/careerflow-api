@@ -18,8 +18,11 @@ import java.lang.annotation.Target;
         @ApiResponse(responseCode = "400", description = """
                 A013: 이미 인증 완료 /
                 A014: 인증 코드 만료 /
-                A015: 인증 코드 불일치 /
-                U004: 사용자 없음
+                A015: 인증 코드 불일치
+                """,
+                content = @Content(schema = @Schema(implementation = CommonResponse.class))),
+        @ApiResponse(responseCode = "404", description = """
+                A017: 인증 정보 없음 (재발송 시 가입 진행 중인 이메일 아닌 경우)
                 """,
                 content = @Content(schema = @Schema(implementation = CommonResponse.class)))
 })

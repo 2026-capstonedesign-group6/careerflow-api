@@ -2,7 +2,7 @@ package com.jobhelper.careerflowapi.user.strategy;
 
 import com.jobhelper.careerflowapi.global.domain.ErrorCode;
 import com.jobhelper.careerflowapi.global.exception.BusinessException;
-import com.jobhelper.careerflowapi.user.application.LoginResult;
+import com.jobhelper.careerflowapi.user.application.dto.LoginResult;
 import com.jobhelper.careerflowapi.user.domain.entity.User;
 import com.jobhelper.careerflowapi.user.domain.entity.UserAccount;
 import com.jobhelper.careerflowapi.user.domain.enums.Provider;

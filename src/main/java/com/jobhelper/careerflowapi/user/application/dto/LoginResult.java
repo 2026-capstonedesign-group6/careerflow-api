@@ -1,4 +1,4 @@
-package com.jobhelper.careerflowapi.user.application;
+package com.jobhelper.careerflowapi.user.application.dto;
 
 import org.springframework.http.ResponseCookie;
 

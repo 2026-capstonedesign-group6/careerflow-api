@@ -2,7 +2,7 @@ package com.jobhelper.careerflowapi.user.command;
 
 import com.jobhelper.careerflowapi.global.domain.ErrorCode;
 import com.jobhelper.careerflowapi.global.exception.BusinessException;
-import com.jobhelper.careerflowapi.user.application.LoginResult;
+import com.jobhelper.careerflowapi.user.application.dto.LoginResult;
 import com.jobhelper.careerflowapi.user.domain.enums.Provider;
 import com.jobhelper.careerflowapi.user.infrastructure.UserRepository;
 import com.jobhelper.careerflowapi.user.presentation.dto.request.LocalLoginRequest;
@@ -11,7 +11,6 @@ import com.jobhelper.careerflowapi.user.strategy.EmailAccountStrategy;
 import com.jobhelper.careerflowapi.user.strategy.SocialAccountStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

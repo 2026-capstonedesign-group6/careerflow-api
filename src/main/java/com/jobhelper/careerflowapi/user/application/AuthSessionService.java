@@ -5,6 +5,7 @@ import com.jobhelper.careerflowapi.global.exception.AuthorizationException;
 import com.jobhelper.careerflowapi.global.exception.BusinessException;
 import com.jobhelper.careerflowapi.global.security.SecurityFacade;
 import com.jobhelper.careerflowapi.global.security.dto.AuthTokens;
+import com.jobhelper.careerflowapi.user.application.dto.LoginResult;
 import com.jobhelper.careerflowapi.user.domain.session.AuthSession;
 import com.jobhelper.careerflowapi.user.domain.entity.User;
 import com.jobhelper.careerflowapi.user.infrastructure.AuthSessionRepository;

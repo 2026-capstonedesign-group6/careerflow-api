@@ -1,6 +1,6 @@
 package com.jobhelper.careerflowapi.user.event;
 
-import com.jobhelper.careerflowapi.user.application.LoginResult;
+import com.jobhelper.careerflowapi.user.application.dto.LoginResult;
 import com.jobhelper.careerflowapi.user.domain.entity.User;
 import lombok.Getter;
 

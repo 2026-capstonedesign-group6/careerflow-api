@@ -4,7 +4,7 @@ import com.jobhelper.careerflowapi.global.domain.ErrorCode;
 import com.jobhelper.careerflowapi.global.domain.dto.CommonResponse;
 import com.jobhelper.careerflowapi.global.exception.AuthorizationException;
 import com.jobhelper.careerflowapi.user.application.AuthSessionService;
-import com.jobhelper.careerflowapi.user.application.LoginResult;
+import com.jobhelper.careerflowapi.user.application.dto.LoginResult;
 import com.jobhelper.careerflowapi.user.command.AccountCommandHandler;
 import com.jobhelper.careerflowapi.user.docs.AuthControllerDocs;
 import com.jobhelper.careerflowapi.user.presentation.dto.request.LocalLoginRequest;
