@@ -2,13 +2,13 @@ package com.jobhelper.careerflowapi.user.application;
 
 import com.jobhelper.careerflowapi.global.domain.ErrorCode;
 import com.jobhelper.careerflowapi.global.exception.BusinessException;
-import com.jobhelper.careerflowapi.user.domain.entity.User;
+import com.jobhelper.careerflowapi.user.domain.verification.PendingSignup;
 import com.jobhelper.careerflowapi.user.domain.verification.VerificationSession;
+import com.jobhelper.careerflowapi.user.infrastructure.PendingSignupRepository;
 import com.jobhelper.careerflowapi.user.infrastructure.UserRepository;
 import com.jobhelper.careerflowapi.user.infrastructure.VerificationSessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 
@@ -17,19 +17,19 @@ import java.security.SecureRandom;
 public class VerificationService {
 
     private final VerificationSessionRepository verificationSessionRepository;
+    private final PendingSignupRepository pendingSignupRepository;
     private final UserRepository userRepository;
     private final MailService mailService;
+    private final UserCreationService userCreationService;
 
     private static final SecureRandom RANDOM = new SecureRandom();
 
     public void sendVerificationEmail(String email, String nickname) {
         String code = generateCode();
-        VerificationSession session = VerificationSession.of(email, code);
-        verificationSessionRepository.save(session);
+        verificationSessionRepository.save(VerificationSession.of(email, code));
         mailService.sendVerificationCode(email, nickname, code);
     }
 
-    @Transactional
     public void verify(String email, String code) {
         VerificationSession session = verificationSessionRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessException(ErrorCode.VERIFICATION_EXPIRED));
@@ -38,27 +38,28 @@ public class VerificationService {
             throw new BusinessException(ErrorCode.VERIFICATION_CODE_MISMATCH);
         }
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-
-        if (user.isEmailVerified()) {
+        if (userRepository.existsByEmail(email)) {
             throw new BusinessException(ErrorCode.VERIFICATION_ALREADY_COMPLETED);
         }
 
-        user.verifyEmail();
+        PendingSignup pending = pendingSignupRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.VERIFICATION_EXPIRED));
+
+        userCreationService.createUser(pending);
+
         verificationSessionRepository.delete(email);
+        pendingSignupRepository.delete(email);
     }
 
-    @Transactional(readOnly = true)
     public void resend(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-
-        if (user.isEmailVerified()) {
+        if (userRepository.existsByEmail(email)) {
             throw new BusinessException(ErrorCode.VERIFICATION_ALREADY_COMPLETED);
         }
 
-        sendVerificationEmail(email, user.getNickname());
+        PendingSignup pending = pendingSignupRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.VERIFICATION_NOT_FOUND));
+
+        sendVerificationEmail(email, pending.getNickname());
     }
 
     private String generateCode() {

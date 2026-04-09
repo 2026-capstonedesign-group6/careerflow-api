@@ -3,12 +3,14 @@ package com.jobhelper.careerflowapi.user.strategy;
 import com.jobhelper.careerflowapi.global.domain.ErrorCode;
 import com.jobhelper.careerflowapi.global.exception.BusinessException;
 import com.jobhelper.careerflowapi.user.application.LoginResult;
-import com.jobhelper.careerflowapi.user.domain.enums.Provider;
+import com.jobhelper.careerflowapi.user.application.VerificationService;
 import com.jobhelper.careerflowapi.user.domain.entity.User;
 import com.jobhelper.careerflowapi.user.domain.entity.UserAccount;
+import com.jobhelper.careerflowapi.user.domain.enums.Provider;
+import com.jobhelper.careerflowapi.user.domain.verification.PendingSignup;
 import com.jobhelper.careerflowapi.user.event.LoginEvent;
 import com.jobhelper.careerflowapi.user.event.LoginFailedEvent;
-import com.jobhelper.careerflowapi.user.event.UserRegisterEvent;
+import com.jobhelper.careerflowapi.user.infrastructure.PendingSignupRepository;
 import com.jobhelper.careerflowapi.user.infrastructure.UserAccountRepository;
 import com.jobhelper.careerflowapi.user.infrastructure.UserRepository;
 import com.jobhelper.careerflowapi.user.presentation.dto.request.LocalLoginRequest;
@@ -19,32 +21,44 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class EmailAccountStrategy implements AccountStrategy {
 
     private final UserRepository userRepository;
     private final UserAccountRepository userAccountRepository;
+    private final PendingSignupRepository pendingSignupRepository;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher eventPublisher;
+    private final VerificationService verificationService;
 
-    @Transactional
     public void register(LocalSignupRequest request) {
-        User user = User.builder()
-                .email(request.email())
-                .nickname(request.nickname())
-                .role("ROLE_USER")
-                .build();
+        if (userRepository.existsByEmail(request.email())) {
+            throw new BusinessException(ErrorCode.EMAIL_ALREADY_EXISTS);
+        }
 
-        UserAccount account = UserAccount.builder()
-                .provider(Provider.LOCAL)
-                .password(passwordEncoder.encode(request.password()))
-                .build();
+        String encodedPassword = passwordEncoder.encode(request.password());
 
-        user.addAccount(account);
-        userRepository.save(user);
+        Optional<PendingSignup> existing = pendingSignupRepository.findByEmail(request.email());
+        PendingSignup pending;
 
-        eventPublisher.publishEvent(new UserRegisterEvent(user));
+        if (existing.isPresent()) {
+            pending = existing.get().withNewAttempt(request.nickname(), encodedPassword);
+            pendingSignupRepository.save(pending);
+            if (pending.isBlocked()) {
+                throw new BusinessException(ErrorCode.TOO_MANY_REQUESTS);
+            }
+        } else {
+            if (userRepository.existsByNickname(request.nickname())) {
+                throw new BusinessException(ErrorCode.NICKNAME_ALREADY_EXISTS);
+            }
+            pending = PendingSignup.of(request.email(), request.nickname(), encodedPassword);
+            pendingSignupRepository.save(pending);
+        }
+
+        verificationService.sendVerificationEmail(request.email(), request.nickname());
     }
 
     @Transactional(readOnly = true)
@@ -64,10 +78,6 @@ public class EmailAccountStrategy implements AccountStrategy {
         if (!passwordEncoder.matches(request.password(), account.getPassword())) {
             eventPublisher.publishEvent(new LoginFailedEvent(request.email(), "비밀번호 불일치"));
             throw new BusinessException(ErrorCode.PASSWORD_NOT_MATCH);
-        }
-
-        if (!user.isEmailVerified()) {
-            throw new BusinessException(ErrorCode.VERIFICATION_NOT_VERIFIED);
         }
 
         LoginEvent event = new LoginEvent(user);

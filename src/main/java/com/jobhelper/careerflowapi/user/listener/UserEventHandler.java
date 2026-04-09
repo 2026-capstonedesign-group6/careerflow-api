@@ -1,6 +1,5 @@
 package com.jobhelper.careerflowapi.user.listener;
 
-import com.jobhelper.careerflowapi.user.application.VerificationService;
 import com.jobhelper.careerflowapi.user.event.LoginFailedEvent;
 import com.jobhelper.careerflowapi.user.event.UserRegisterEvent;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +15,11 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class UserEventHandler {
 
-    private final VerificationService verificationService;
-
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     public void onRegister(UserRegisterEvent event) {
         log.info("회원가입 완료 - userId={}, email={}", event.user().getId(), event.user().getEmail());
-        verificationService.sendVerificationEmail(event.user().getEmail(), event.user().getNickname());
+        // TODO: 기본 프로필 설정 등 사이드이펙트
     }
 
     @EventListener

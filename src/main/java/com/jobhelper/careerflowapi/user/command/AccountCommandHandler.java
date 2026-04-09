@@ -21,11 +21,7 @@ public class AccountCommandHandler {
     private final EmailAccountStrategy emailAccountStrategy;
     private final SocialAccountStrategy socialAccountStrategy;
 
-    @Transactional
     public void register(LocalSignupRequest request) {
-        if (userRepository.existsByEmail(request.email())) {
-            throw new BusinessException(ErrorCode.EMAIL_ALREADY_EXISTS);
-        }
         if (userRepository.existsByNickname(request.nickname())) {
             throw new BusinessException(ErrorCode.NICKNAME_ALREADY_EXISTS);
         }
