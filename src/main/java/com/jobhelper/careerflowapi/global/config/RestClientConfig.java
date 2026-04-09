@@ -1,9 +1,41 @@
 package com.jobhelper.careerflowapi.global.config;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestClient;
 
 @Configuration
+@EnableConfigurationProperties(OAuthProperties.class)
 public class RestClientConfig {
+
+    @Bean("kakaoAuthRestClient")
+    public RestClient kakaoAuthRestClient() {
+        return RestClient.builder()
+                .baseUrl("https://kauth.kakao.com")
+                .build();
+    }
+
+    @Bean("kakaoApiRestClient")
+    public RestClient kakaoApiRestClient() {
+        return RestClient.builder()
+                .baseUrl("https://kapi.kakao.com")
+                .build();
+    }
+
+    @Bean("googleAuthRestClient")
+    public RestClient googleAuthRestClient() {
+        return RestClient.builder()
+                .baseUrl("https://oauth2.googleapis.com")
+                .build();
+    }
+
+    @Bean("googleApiRestClient")
+    public RestClient googleApiRestClient() {
+        return RestClient.builder()
+                .baseUrl("https://www.googleapis.com")
+                .build();
+    }
 
     /* 사용 예시
 

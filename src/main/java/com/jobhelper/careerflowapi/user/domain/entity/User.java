@@ -36,6 +36,9 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String role;
 
+    @Column(nullable = false)
+    private boolean emailVerified = false;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserAccount> accounts = new ArrayList<>();
 
@@ -44,6 +47,11 @@ public class User extends BaseTimeEntity {
         this.email = email;
         this.nickname = nickname;
         this.role = role;
+        this.emailVerified = false;
+    }
+
+    public void verifyEmail() {
+        this.emailVerified = true;
     }
 
     public void addAccount(UserAccount account) {

@@ -39,4 +39,8 @@ public class AccountCommandHandler {
     public LoginResult oAuth2Login(Provider provider, String code) {
         return socialAccountStrategy.authenticate(provider, code);
     }
+
+    public String getOAuth2AuthorizationUri(Provider provider) {
+        return socialAccountStrategy.getAuthorizationUri(provider);
+    }
 }

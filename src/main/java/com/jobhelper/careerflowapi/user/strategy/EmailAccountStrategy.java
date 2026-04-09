@@ -66,6 +66,10 @@ public class EmailAccountStrategy implements AccountStrategy {
             throw new BusinessException(ErrorCode.PASSWORD_NOT_MATCH);
         }
 
+        if (!user.isEmailVerified()) {
+            throw new BusinessException(ErrorCode.VERIFICATION_NOT_VERIFIED);
+        }
+
         LoginEvent event = new LoginEvent(user);
         eventPublisher.publishEvent(event);
         return event.getResult();

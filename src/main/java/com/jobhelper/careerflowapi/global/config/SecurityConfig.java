@@ -39,7 +39,9 @@ public class SecurityConfig {
             "/api/auth/logout",
             "/api/auth/refresh",
             "/api/auth/oauth2/authorization/**",
-            "/api/auth/oauth2/callback/**"
+            "/api/auth/oauth2/callback/**",
+            "/api/auth/verify/email",
+            "/api/auth/verify/email/resend"
     };
 
     private static final String[] API_URLS = {
