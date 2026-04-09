@@ -1,0 +1,42 @@
+name: Feature
+description: 새로운 기능 요청
+title: "[Feature] "
+labels: ["feature"]
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: 카테고리
+      options:
+        - API
+        - 인증/인가
+        - 데이터베이스
+        - 비즈니스 로직
+        - 인프라/배포
+        - 기타
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 설명
+      placeholder: 어떤 기능을 추가하나요?
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: 완료 조건
+      placeholder: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: 참고 사항
+      placeholder: 관련 링크, 참고 자료 등 (선택)
