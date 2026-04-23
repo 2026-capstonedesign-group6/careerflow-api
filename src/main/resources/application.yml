@@ -27,6 +27,15 @@ logging:
     root: INFO
     dev.wonyoung: DEBUG
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
 oauth2:
   providers:
     kakao:

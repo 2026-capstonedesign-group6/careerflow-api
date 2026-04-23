@@ -1,0 +1,45 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: [ CI ]
+    branches: [ main ]
+    types: [ completed ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy to Railway
+        run: railway up --service ${{ vars.RAILWAY_SERVICE_NAME }}
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: Health check
+        run: |
+          echo "배포 안정화 대기중..."
+          sleep 20
+          for i in $(seq 1 10); do
+            STATUS=$(curl -sf -o /dev/null -w "%{http_code}" ${{ vars.RAILWAY_URL }}/actuator/health)
+            if [ "$STATUS" = "200" ]; then
+              echo "헬스체크 통과 (시도 $i)"
+              exit 0
+            fi
+            echo "헬스체크 실패 (시도 $i) - HTTP $STATUS, 10초 후 재시도..."
+            sleep 10
+          done
+          echo "헬스체크 최종 실패"
+          exit 1
+
+      - name: Rollback on failure
+        if: failure()
+        run: railway rollback --service ${{ vars.RAILWAY_SERVICE_NAME }}
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
