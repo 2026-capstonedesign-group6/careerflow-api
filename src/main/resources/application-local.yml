@@ -26,3 +26,8 @@ server:
 springdoc:
   swagger-ui:
     enabled: true
+
+logging:
+  level:
+    com.jobhelper.careerflowapi.user.infrastructure.VerificationSessionRepository: DEBUG
+    com.jobhelper.careerflowapi.user.infrastructure.PendingSignupRepository: DEBUG
