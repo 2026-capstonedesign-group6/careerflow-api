@@ -1,0 +1,55 @@
+### Base URL
+@baseUrl = http://localhost:8080
+@contentType = application/json
+@accessToken = <paste-access-token-here>
+
+### 1. Step1 - 활동 그룹핑 (텍스트만)
+POST {{baseUrl}}/api/step1/group
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0
+
+------WebKitFormBoundary
+Content-Disposition: form-data; name="rawText"
+
+대학교 시절 교내 창업 동아리 회장을 맡아 팀원 10명을 이끌었습니다.
+스타트업 인턴으로 6개월간 백엔드 개발을 담당했습니다.
+교내 해커톤에서 1등을 수상했습니다.
+------WebKitFormBoundary--
+
+### 2. Step5 - 경험 추천 (경험 ID 목록 + 문항)
+POST {{baseUrl}}/api/step5/recommend
+Content-Type: {{contentType}}
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0
+
+{
+  "question": "팀워크 역량을 발휘한 경험을 서술하시오.",
+  "experienceIds": [1, 2, 3]
+}
+
+### 3. Step6 - 자소서 생성 (FORMAL 톤)
+POST {{baseUrl}}/api/step6/essay
+Content-Type: {{contentType}}
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0
+
+{
+  "question": "지원 동기를 서술하시오.",
+  "experienceIds": [1],
+  "targetLength": 500,
+  "tone": "FORMAL"
+}
+
+### 4. Step6 - 자소서 생성 (CASUAL 톤)
+POST {{baseUrl}}/api/step6/essay
+Content-Type: {{contentType}}
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0
+
+{
+  "question": "본인의 강점을 서술하시오.",
+  "experienceIds": [1, 2],
+  "targetLength": 300,
+  "tone": "CASUAL"
+}

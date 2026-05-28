@@ -1,0 +1,43 @@
+### Base URL
+@baseUrl = http://localhost:8080
+@contentType = application/json
+# 로그인 후 발급받은 accessToken을 붙여넣으세요
+@accessToken = <paste-access-token-here>
+
+### 1. 내 프로필 조회
+GET {{baseUrl}}/api/users/profile
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0
+
+### 2. 프로필 수정
+PUT {{baseUrl}}/api/users/profile
+Content-Type: {{contentType}}
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0
+
+{
+  "name": "홍길동",
+  "phone": "010-1234-5678",
+  "birthDate": null,
+  "address": "서울시 강남구",
+  "educations": [
+    {
+      "schoolName": "한국대학교",
+      "major": "컴퓨터공학",
+      "level": "UNIVERSITY",
+      "startDate": "2018-03",
+      "endDate": "2022-02",
+      "graduated": true
+    }
+  ],
+  "careers": [
+    {
+      "companyName": "카카오",
+      "position": "백엔드 개발자",
+      "startDate": "2022-03",
+      "endDate": null,
+      "current": true,
+      "description": "서버 개발"
+    }
+  ]
+}

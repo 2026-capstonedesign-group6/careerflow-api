@@ -15,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -111,6 +112,14 @@ public class GlobalExceptionAdvice {
         return ResponseEntity
                 .status(ErrorCode.FORBIDDEN.getStatus())
                 .body(CommonResponse.onFailure(ErrorCode.FORBIDDEN));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<CommonResponse<Void>> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex, HttpServletRequest request) {
+        log.warn("[BAD] {} {} | 파일 크기 초과: {}", request.getMethod(), request.getRequestURI(), ex.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.INVALID_INPUT_VALUE.getStatus())
+                .body(CommonResponse.onFailure(ErrorCode.INVALID_INPUT_VALUE, "파일 크기가 허용 범위를 초과했습니다. (최대 20MB)"));
     }
 
     @ExceptionHandler(Exception.class)

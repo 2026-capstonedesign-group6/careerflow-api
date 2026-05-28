@@ -1,0 +1,8 @@
+### Base URL
+@baseUrl = http://localhost:8080
+@accessToken = <paste-access-token-here>
+
+### 대시보드 조회
+GET {{baseUrl}}/api/dashboard
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0
