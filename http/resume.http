@@ -1,0 +1,53 @@
+### Base URL
+@baseUrl = http://localhost:8080
+@contentType = application/json
+@accessToken = <paste-access-token-here>
+
+### 1. 이력서 생성
+# @name createResume
+POST {{baseUrl}}/api/resumes
+Content-Type: {{contentType}}
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0
+
+{
+  "title": "네이버 공채 지원",
+  "stepProgress": 3,
+  "essays": [
+    {
+      "question": "지원 동기를 서술하시오.",
+      "content": "저는 네이버의 사용자 중심 철학에 공감합니다.",
+      "orderIndex": 0
+    },
+    {
+      "question": "본인의 강점을 서술하시오.",
+      "content": "문제 해결 능력과 협업 능력이 뛰어납니다.",
+      "orderIndex": 1
+    }
+  ]
+}
+
+### 2. 이력서 목록 조회
+GET {{baseUrl}}/api/resumes?size=10
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0
+
+### 3. 이력서 단건 조회
+GET {{baseUrl}}/api/resumes/1
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0
+
+### 4. 이력서 삭제
+DELETE {{baseUrl}}/api/resumes/1
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0
+
+### 5. 이력서 다운로드 - PDF
+GET {{baseUrl}}/api/resumes/1/download?format=pdf
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0
+
+### 6. 이력서 다운로드 - DOCX
+GET {{baseUrl}}/api/resumes/1/download?format=docx
+Authorization: Bearer {{accessToken}}
+X-API-Version: 1.0.0

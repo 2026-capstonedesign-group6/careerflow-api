@@ -49,7 +49,23 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "A020", "유효하지 않은 리프레시 토큰입니다."),
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "A021", "리프레시 토큰을 찾을 수 없습니다. (로그아웃 되었습니다)"),
     REFRESH_TOKEN_MISMATCH(HttpStatus.UNAUTHORIZED, "A022", "리프레시 토큰이 일치하지 않습니다."),
-    REFRESH_TOKEN_THEFT_DETECTED(HttpStatus.UNAUTHORIZED, "A023", "토큰 탈취가 감지되었습니다. 보안을 위해 재로그인이 필요합니다.");
+    REFRESH_TOKEN_THEFT_DETECTED(HttpStatus.UNAUTHORIZED, "A023", "토큰 탈취가 감지되었습니다. 보안을 위해 재로그인이 필요합니다."),
+
+    // Profile (P-xxx)
+    PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "P001", "프로필 정보를 찾을 수 없습니다."),
+
+    // Experience (E-xxx)
+    EXPERIENCE_NOT_FOUND(HttpStatus.NOT_FOUND, "E001", "경험 정보를 찾을 수 없습니다."),
+    EXPERIENCE_ACCESS_DENIED(HttpStatus.FORBIDDEN, "E002", "해당 경험에 대한 접근 권한이 없습니다."),
+
+    // Resume (R-xxx)
+    RESUME_NOT_FOUND(HttpStatus.NOT_FOUND, "R001", "이력서를 찾을 수 없습니다."),
+    RESUME_ACCESS_DENIED(HttpStatus.FORBIDDEN, "R002", "해당 이력서에 대한 접근 권한이 없습니다."),
+    RESUME_GENERATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "R003", "이력서 파일 생성에 실패했습니다."),
+
+    // AI (AI-xxx)
+    AI_SERVER_ERROR(HttpStatus.BAD_GATEWAY, "AI001", "AI 서버와의 통신 중 오류가 발생했습니다."),
+    AI_SERVER_TIMEOUT(HttpStatus.GATEWAY_TIMEOUT, "AI002", "AI 서버 응답 시간이 초과되었습니다.");
 
     private final HttpStatus status;
     private final String code;

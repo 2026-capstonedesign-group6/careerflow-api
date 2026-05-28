@@ -1,13 +1,14 @@
 package com.jobhelper.careerflowapi.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jobhelper.careerflowapi.ai.config.OpenAiProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
 @Configuration
-@EnableConfigurationProperties(OAuthProperties.class)
+@EnableConfigurationProperties({OAuthProperties.class, OpenAiProperties.class})
 public class RestClientConfig {
 
     @Bean
@@ -40,6 +41,13 @@ public class RestClientConfig {
     public RestClient googleApiRestClient() {
         return RestClient.builder()
                 .baseUrl("https://www.googleapis.com")
+                .build();
+    }
+
+    @Bean("openAiRestClient")
+    public RestClient openAiRestClient() {
+        return RestClient.builder()
+                .baseUrl("https://api.openai.com")
                 .build();
     }
 

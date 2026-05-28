@@ -1,0 +1,56 @@
+### Base URL
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### 1. 회원가입 (이메일 인증 전 임시 저장)
+POST {{baseUrl}}/api/auth/signup/local
+Content-Type: {{contentType}}
+X-API-Version: 1.0.0
+
+{
+  "email": "test@example.com",
+  "password": "Test1234!",
+  "nickname": "테스터"
+}
+
+### 2. 이메일 인증 코드 확인
+POST {{baseUrl}}/api/auth/verify/email
+Content-Type: {{contentType}}
+X-API-Version: 1.0.0
+
+{
+  "email": "test@example.com",
+  "code": "123456"
+}
+
+### 3. 이메일 인증 코드 재전송
+POST {{baseUrl}}/api/auth/verify/email/resend
+Content-Type: {{contentType}}
+X-API-Version: 1.0.0
+
+{
+  "email": "test@example.com"
+}
+
+### 4. 로그인 (accessToken 반환)
+# @name login
+POST {{baseUrl}}/api/auth/login/local
+Content-Type: {{contentType}}
+X-API-Version: 1.0.0
+
+{
+  "email": "test@example.com",
+  "password": "Test1234!"
+}
+
+### 5. 액세스 토큰 갱신 (refreshToken 쿠키 필요)
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: {{contentType}}
+X-API-Version: 1.0.0
+Cookie: refreshToken=<paste-refresh-token-here>
+
+### 6. 로그아웃
+POST {{baseUrl}}/api/auth/logout
+Content-Type: {{contentType}}
+X-API-Version: 1.0.0
+Cookie: refreshToken=<paste-refresh-token-here>

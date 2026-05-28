@@ -36,6 +36,9 @@ management:
     health:
       show-details: never
 
+openai:
+  api-key: ${OPENAI_API_KEY}
+
 oauth2:
   providers:
     kakao:
